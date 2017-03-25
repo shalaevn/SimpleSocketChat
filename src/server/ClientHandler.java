@@ -72,7 +72,7 @@ public class ClientHandler {
                 String str = in.readUTF();
                 if (str.startsWith("/auth")) {
                     String[] partsAuth = str.split(" ");
-                    if (partsAuth.length == 3 && partsAuth[1].equals("login") && partsAuth[2].equals("pass")) {
+                    if (partsAuth.length == 3 && server.authService.setLogin(partsAuth[1], partsAuth[2])) {
                         name = partsAuth[1];
                         isAuth = true;
                         server.addClient(this);

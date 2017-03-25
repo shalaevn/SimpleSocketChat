@@ -13,6 +13,7 @@ public class Server {
     private Socket socket;
     private final int PORT = 8189;
     private Vector<ClientHandler> clients = new Vector<>();
+    DBAuthService authService = new DBAuthService();
 
      public Server(){
          try {
@@ -32,6 +33,7 @@ public class Server {
              } catch (IOException e) {
                  e.printStackTrace();
              }
+            authService.shutdown();
          }
      }
 
