@@ -135,6 +135,13 @@ public class ClientWindow extends JFrame{
             e.printStackTrace();
         }
 
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                inputMessageField.setText("/end");
+                sendMessage();
+            }
+        });
 
         addWindowListener(new WindowAdapter() {
             @Override

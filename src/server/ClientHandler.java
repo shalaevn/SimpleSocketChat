@@ -72,18 +72,24 @@ public class ClientHandler {
                 String str = in.readUTF();
                 if (str.startsWith("/auth")) {
                     String[] partsAuth = str.split(" ");
-                    if (partsAuth.length == 3 && server.authService.setLogin(partsAuth[1], partsAuth[2])) {
-                        name = partsAuth[1];
-                        isAuth = true;
-                        server.addClient(this);
-                        out.writeUTF("/authOK");
-                        server.broadcastMSG("Подключился " + name);
-                    } else out.writeUTF("Неправильная пара логин/пароль");
+                    if (!server.isConnected(partsAuth[1])) {
+                        if (partsAuth.length == 3 && server.authService.setLogin(partsAuth[1], partsAuth[2])) {
+                            name = partsAuth[1];
+                            isAuth = true;
+                            server.addClient(this);
+                            out.writeUTF("/authOK");
+                            server.broadcastMSG("Подключился " + name);
+                        } else out.writeUTF("Неправильная пара логин/пароль");
+                    } else out.writeUTF("Пользователь с таким именем уже подключен");
                 } else out.writeUTF("Необходимо авторизоваться");
             }
         }catch (IOException e){
 
         }
+    }
+
+    String getName(){
+        return name;
     }
 
     private void removeClient(){

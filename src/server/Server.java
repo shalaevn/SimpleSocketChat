@@ -50,4 +50,12 @@ public class Server {
             client.sendMSG(s);
         }
     }
+
+    boolean isConnected(String name){
+        for (int i = 0; i < clients.size(); i++) {
+            if(name.equals(clients.get(i).getName()))
+                return true;
+        }
+        return false;
+    }
 }
