@@ -13,6 +13,7 @@ public class Server {
     private Socket socket;
     private final int PORT = 8189;
     private Vector<ClientHandler> clients = new Vector<>();
+    DBAuthService authService = new DBAuthService();
 
      public Server(){
          try {
@@ -32,6 +33,7 @@ public class Server {
              } catch (IOException e) {
                  e.printStackTrace();
              }
+            authService.shutdown();
          }
      }
 
@@ -47,5 +49,13 @@ public class Server {
         for (ClientHandler client : clients){
             client.sendMSG(s);
         }
+    }
+
+    boolean isConnected(String name){
+        for (int i = 0; i < clients.size(); i++) {
+            if(name.equals(clients.get(i).getName()))
+                return true;
+        }
+        return false;
     }
 }

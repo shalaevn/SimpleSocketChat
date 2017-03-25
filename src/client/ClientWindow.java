@@ -1,7 +1,6 @@
 package client;
 
 import javax.swing.*;
-import javax.swing.text.Caret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -136,6 +135,13 @@ public class ClientWindow extends JFrame{
             e.printStackTrace();
         }
 
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                inputMessageField.setText("/end");
+                sendMessage();
+            }
+        });
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -176,9 +182,6 @@ public class ClientWindow extends JFrame{
 
 
     //дописать логику сохранения логина и пароля в файле серверной частью
-    //реализовать на сервере метод who, который показывает пользователей в сети
-    //прочитать не прочитанные методички
-    //посмотреть последнее видео курса java2
     //доделать чат соответствуя последнему уроку
     public void setAuth(boolean auth){
         isAuth = auth;
