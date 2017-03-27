@@ -153,6 +153,7 @@ public class ClientWindow extends JFrame{
                                 chatMessages.append("Вы отключены от чата");
                             } else if(broadcastMessage.equals("/relog")){
                                 setAuth(false);
+                                chatMessages.append("Вы отключены от чата\n");
                                 auth();
                             } else chatMessages.append(broadcastMessage + "\n");
                             chatMessages.setCaretPosition(chatMessages.getDocument().getLength());
