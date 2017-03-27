@@ -31,6 +31,10 @@ public class ClientWindow extends JFrame{
     private JTextField loginField;
     private JPasswordField pass;
     private JButton loginButton;
+    private JTextField regLoginField;
+    private JPasswordField regPassField;
+    private JButton regButton;
+
     private boolean isExit = false;
     private boolean isAuth = true;
     private String name;
@@ -60,13 +64,19 @@ public class ClientWindow extends JFrame{
             inputPanel.add(inputMessageField);
             inputPanel.add(sendButton);
             add(inputPanel, BorderLayout.SOUTH);
-            authPanel = new JPanel(new GridLayout(1, 3));
+            authPanel = new JPanel(new GridLayout(2, 3));
             loginField = new JTextField();
             pass = new JPasswordField();
             loginButton = new JButton("LOGIN");
             authPanel.add(loginField);
             authPanel.add(pass);
             authPanel.add(loginButton);
+            regLoginField = new JTextField();
+            regPassField = new JPasswordField();
+            regButton = new JButton("REGISTRATION");
+            authPanel.add(regLoginField);
+            authPanel.add(regPassField);
+            authPanel.add(regButton);
             add(authPanel, BorderLayout.NORTH);
             setAuth(false);
 
@@ -92,6 +102,27 @@ public class ClientWindow extends JFrame{
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     sendLogin();
+                }
+            });
+
+            regLoginField.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    tryReg();
+                }
+            });
+
+            regPassField.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    tryReg();
+                }
+            });
+
+            regButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    tryReg();
                 }
             });
 
@@ -165,7 +196,11 @@ public class ClientWindow extends JFrame{
                 if (broadcastMessage.equals("/authOK")) {
                     setAuth(true);
                     name = loginField.getText();
-                } else chatMessages.append(broadcastMessage + "\n");
+                } else if (broadcastMessage.equals("/regOK")) {
+                    setAuth(true);
+                    name = regLoginField.getText();
+                } else
+                    chatMessages.append(broadcastMessage + "\n");
                 chatMessages.setCaretPosition(chatMessages.getDocument().getLength());
             }
         }catch (IOException e){
@@ -175,6 +210,14 @@ public class ClientWindow extends JFrame{
     private void sendLogin(){
         try {
             out.writeUTF("/auth " + loginField.getText() + " " + pass.getText());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void tryReg(){
+        try {
+            out.writeUTF("/reg " + regLoginField.getText() + " " + regPassField.getText());
         } catch (IOException e) {
             e.printStackTrace();
         }

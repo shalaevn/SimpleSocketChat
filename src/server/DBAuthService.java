@@ -13,6 +13,14 @@ public class DBAuthService {
         return SQLHandler.getAuth(name, pass);
     }
 
+    public void registration(String name, String pass){
+        SQLHandler.registerNewUser(name, pass);
+    }
+
+    public boolean findUser(String name){
+        return SQLHandler.findUser(name);
+    }
+
     public void shutdown() {
         SQLHandler.disconnect();
         System.out.println("Базовый сервис авторизации завершил работу");
