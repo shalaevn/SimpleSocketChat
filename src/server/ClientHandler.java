@@ -70,19 +70,26 @@ public class ClientHandler {
         try {
             while (!isAuth) {
                 String str = in.readUTF();
+                String[] partsAuth = str.split(" ");
                 if (str.startsWith("/auth")) {
-                    String[] partsAuth = str.split(" ");
                     if (!server.isConnected(partsAuth[1])) {
                         if (partsAuth.length == 3 && server.authService.setLogin(partsAuth[1], partsAuth[2])) {
                             name = partsAuth[1];
-                            isAuth = true;
-                            server.addClient(this);
                             out.writeUTF("/authOK");
-                            server.broadcastMSG("Подключился " + name);
+                            isAuth = true;
                         } else out.writeUTF("Неправильная пара логин/пароль");
                     } else out.writeUTF("Пользователь с таким именем уже подключен");
-                } else out.writeUTF("Необходимо авторизоваться");
+                } else if(str.startsWith("/reg")) {
+                    if (partsAuth.length == 3 && !server.authService.findUser(partsAuth[1])){
+                        server.authService.registration(partsAuth[1], partsAuth[2]);
+                        out.writeUTF("/regOK");
+                        name = partsAuth[1];
+                        isAuth = true;
+                    } else out.writeUTF("Пользователь с таким логином уже зарегистрирован");
+                }
             }
+            server.addClient(this);
+            server.broadcastMSG("Подключился " + name);
         }catch (IOException e){
 
         }

@@ -9,6 +9,7 @@ public class SQLHandler {
     private static Connection connection;
     private static PreparedStatement insert;
     private static PreparedStatement select;
+    private static PreparedStatement find;
 
 
     public static void connect(){
@@ -16,6 +17,7 @@ public class SQLHandler {
             connection = DriverManager.getConnection("jdbc:sqlite:Users.db");
             insert = connection.prepareStatement("INSERT INTO User (Name, Pass) VALUES (?, ?);");
             select = connection.prepareStatement("SELECT Name FROM User WHERE Name = ? and Pass = ?");
+            find = connection.prepareStatement("SELECT Name FROM User WHERE Name = ?");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -39,14 +41,23 @@ public class SQLHandler {
         }
     }
 
+    public static boolean findUser(String name){
+        try {
+            find.setString(1, name);
+            ResultSet rs = find.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static boolean getAuth(String name, String pass){
         try {
             select.setString(1, name);
             select.setString(2, pass);
             ResultSet rs = select.executeQuery();
-            if (rs.next()){
-                return true;
-            }
+            return rs.next();
         } catch (SQLException e) {
             e.printStackTrace();
         }
